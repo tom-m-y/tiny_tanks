@@ -1,11 +1,18 @@
 import eruda from "eruda"
 import p5 from "p5"
+import tank from "./tank";
 const e = eruda
 e.init()
-e.show()
 
 
 let canvas:HTMLElement|null;
+
+//@ts-ignore
+let drawQueue:[Function|tank]= []
+
+drawQueue.push((p:p5)=>{
+  p.ellipse(50,50,50)
+})
 
 window.addEventListener("load",()=>{
   console.log("load")
@@ -19,9 +26,10 @@ function resize(){
   let pcanvas:HTMLElement = document.getElementById("canvas")?.childNodes.item(0)
   if (!pcanvas){console.log("no pcanv");return}
   
-  pcanvas.style.position = "aboslute"
+  pcanvas.style.position = "absolute"
   pcanvas.style.display = "block"
   pcanvas.style.border = "0"
+  pcanvas.style.width = "auto"
 
   var h = window.innerHeight
   var w = window.innerWidth
@@ -31,7 +39,7 @@ function resize(){
   if (ah < h){
       pcanvas.style.height = ah+"px"
   } else {pcanvas.style.height = h+"px"}
-  
+
   //Center canvas X,Y
   var xOffset = w-pcanvas.getBoundingClientRect().width
   var yOffset = h-pcanvas.getBoundingClientRect().height
@@ -47,11 +55,19 @@ function p5init(){
     p.setup = function(){
       p.createCanvas(1920,1080)
       p.background(0)
+      p.fill(255)
+      // p.ellipse(960,540,200)
     }
     
   
     p.draw = function(){
-      
+      for (let i=0; i<drawQueue.length; i++){
+        let ele:Function|tank = drawQueue[i]
+
+        if (typeof(ele) === "function"){ele(p)}
+
+        if (ele instanceof tank){ele.step()}
+      }
     }
   },
   document.getElementById("canvas"))
