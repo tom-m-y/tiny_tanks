@@ -1,17 +1,18 @@
 import eruda from "eruda"
 import p5 from "p5"
 import tank from "./tank";
+import mouseIO from "./io/mouseIO";
+const mouse = mouseIO.getInstance()
 const e = eruda
 e.init()
 
 
 let canvas:HTMLElement|null;
-
 //@ts-ignore
 let drawQueue:[Function|tank]= []
 
 drawQueue.push((p:p5)=>{
-  p.ellipse(50,50,50)
+  console.log(mouse.mouseX,mouse.mouseY)
 })
 
 window.addEventListener("load",()=>{
