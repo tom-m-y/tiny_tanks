@@ -7,7 +7,7 @@ export default class mouseIO{
 
     constructor(){
         let pcanvas:HTMLElement = document.getElementById("canvas")?.childNodes.item(0)
-        console.log(pcanvas)
+        
         if (!pcanvas){throw new Error("mouseIO couldn't find p5 canvas, initialized before window load?")}
 
         this.canvas = pcanvas

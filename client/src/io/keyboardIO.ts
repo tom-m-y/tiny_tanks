@@ -68,4 +68,13 @@ export default class keyboardHandler{
             }
         )
     }
+
+    isPressed(pKey:string){
+        let isPressed = false;
+        for (const [key,value] of Object.entries(this.keysPressed)){
+            if (value && key === pKey){isPressed = true}
+        }
+
+        return isPressed
+    }
 }

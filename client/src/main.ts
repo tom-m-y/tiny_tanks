@@ -1,7 +1,10 @@
 import eruda from "eruda"
+//@ts-ignore
 import p5 from "p5"
 import tank from "./tank";
 import mouseIO from "./io/mouseIO";
+import keyboardHandler from "./io/keyboardIO";
+const keyboard = keyboardHandler.getInstance()
 const e = eruda
 e.init()
 
@@ -13,8 +16,9 @@ let canvas:HTMLElement|null;
 let drawQueue:[Function|tank]= []
 
 drawQueue.push((p:p5)=>{
-  console.log(mouse.mouseX,mouse.mouseY)
-})
+  // console.log(mouse.mouseX,mouse.mouseY)
+  // console.log(keyboard.isPressed("KeyW"))
+})  
 
 window.addEventListener("load",()=>{
   console.log("load")
@@ -27,6 +31,7 @@ window.addEventListener("load",()=>{
 
 function resize(){
   if (!canvas){console.log("no canv");return}
+  //@ts-ignore
   let pcanvas:HTMLElement = document.getElementById("canvas")?.childNodes.item(0)
   if (!pcanvas){console.log("no pcanv");return}
   
@@ -58,19 +63,21 @@ function p5init(){
 
     p.setup = function(){
       p.createCanvas(1920,1080)
-      p.background(0)
       p.fill(255)
       // p.ellipse(960,540,200)
+      new tank(50,1000,drawQueue)
     }
     
   
     p.draw = function(){
+      p.background(0)
+
       for (let i=0; i<drawQueue.length; i++){
         let ele:Function|tank = drawQueue[i]
 
         if (typeof(ele) === "function"){ele(p)}
 
-        if (ele instanceof tank){ele.step()}
+        if (ele instanceof tank){ele.step(p)}
       }
     }
   },
