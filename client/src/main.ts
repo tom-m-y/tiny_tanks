@@ -10,14 +10,16 @@ e.init()
 
 var mouse:mouseIO;
 
+function rgb(r:number,g:number,b:number){
+  return [r,g,b]
+}
 
 let canvas:HTMLElement|null;
 //@ts-ignore
 let drawQueue:[Function|tank]= []
 
 drawQueue.push((p:p5)=>{
-  // console.log(mouse.mouseX,mouse.mouseY)
-  // console.log(keyboard.isPressed("KeyW"))
+  
 })  
 
 window.addEventListener("load",()=>{
@@ -70,7 +72,7 @@ function p5init(){
     
   
     p.draw = function(){
-      p.background(0)
+      p.background(...rgb(221, 145, 90))
 
       for (let i=0; i<drawQueue.length; i++){
         let ele:Function|tank = drawQueue[i]
