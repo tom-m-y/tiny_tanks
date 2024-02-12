@@ -2,9 +2,10 @@ import eruda from "eruda"
 import p5 from "p5"
 import tank from "./tank";
 import mouseIO from "./io/mouseIO";
-const mouse = mouseIO.getInstance()
 const e = eruda
 e.init()
+
+var mouse:mouseIO;
 
 
 let canvas:HTMLElement|null;
@@ -20,6 +21,8 @@ window.addEventListener("load",()=>{
   canvas = document.getElementById("canvas")
   p5init()
   resize()
+
+  mouse = mouseIO.getInstance()
 })
 
 function resize(){

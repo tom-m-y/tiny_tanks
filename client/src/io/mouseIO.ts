@@ -2,24 +2,18 @@
 export default class mouseIO{
     private static instance: mouseIO
 
-    canvas;
     mouseX:number;mouseY:number
+    canvas;
 
     constructor(){
+        let pcanvas:HTMLElement = document.getElementById("canvas")?.childNodes.item(0)
+        console.log(pcanvas)
+        if (!pcanvas){throw new Error("mouseIO couldn't find p5 canvas, initialized before window load?")}
+
+        this.canvas = pcanvas
+
         this.mouseX = 0
         this.mouseY = 0
-
-        window.onload = function(){
-            let canvas:HTMLElement|null = document.getElementById("canvas")
-            
-            for (const ele of canvas.children){
-                console.log("a")
-                console.log(ele)
-            }
-            console.log(canvas)
-            if (canvas)
-            this.canvas = canvas
-        }
 
         window.addEventListener("mousemove",(e)=>{this.mouseMove(e)})
     }
@@ -30,12 +24,11 @@ export default class mouseIO{
     }
 
     private mouseMove(e:MouseEvent){
-        let canvas = this.canvas
-        
-        let left = Math.floor(Number(canvas.style.left.split("p")[0]))
-        let top = Math.floor(Number(canvas.style.top.split("p")[0]))
-        let xScale = 1920/canvas.getBoundingClientRect().width
-        let yScale = 1080/canvas.getBoundingClientRect().height
+        if (!this.canvas){console.log("no canv :(((")}
+        let left = Math.floor(Number(this.canvas.style.left.split("p")[0]))
+        let top = Math.floor(Number(this.canvas.style.top.split("p")[0]))
+        let xScale = 1920/this.canvas.getBoundingClientRect().width
+        let yScale = 1080/this.canvas.getBoundingClientRect().height
         this.mouseX = Math.floor((e.clientX-left)*xScale)
         this.mouseY = Math.floor((e.clientY-top)*yScale)
     }
