@@ -19,7 +19,7 @@ let canvas:HTMLElement|null;
 let drawQueue:[Function|tank]= []
 
 drawQueue.push((p:p5)=>{
-  
+  console.log(drawQueue)
 })  
 
 window.addEventListener("load",()=>{

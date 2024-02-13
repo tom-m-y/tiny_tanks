@@ -27,7 +27,7 @@ export default class tank{
 
             let bx = Math.cos(rad(this.angle+90))*50+this.x
             let by = Math.sin(rad(this.angle+90))*50+this.y
-            console.log(this.angle)
+            
             p.line(
                 this.x,this.y,
                 bx,by
@@ -60,8 +60,8 @@ export default class tank{
         if (keyboard.isPressed("KeyD")){this.x += 5}
         if (keyboard.isPressed("KeyA")){this.x -= 5}
 
-        if (keyboard.isPressed("ArrowLeft")){this.angle -=5}
-        if (keyboard.isPressed("ArrowRight")){this.angle +=5}
+        if (keyboard.isPressed("ArrowLeft")){this.angle -=4}
+        if (keyboard.isPressed("ArrowRight")){this.angle +=4}
 
         this.drawfunc(p)
     }
