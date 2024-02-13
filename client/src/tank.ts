@@ -15,8 +15,10 @@ export default class tank{
     queue;
     drawfunc;
     x;y;angle;
-    constructor(x:number,y:number,queue:[Function|tank]){
+    multi;
+    constructor(x:number,y:number,queue:[Function|tank],multi:boolean){
         this.queue = queue;
+        this.multi = multi
         this.drawfunc = (p:p5)=>{
             p.fill(255)
             p.noStroke()
@@ -54,7 +56,7 @@ export default class tank{
     }
 
     step(p:p5){
-        
+        if(this.multi){return}
         if (keyboard.isPressed("KeyW")){this.y -= 5}
         if (keyboard.isPressed("KeyS")){this.y += 5}
         if (keyboard.isPressed("KeyD")){this.x += 5}

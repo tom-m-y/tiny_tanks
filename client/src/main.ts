@@ -20,7 +20,7 @@ let drawQueue:[Function|tank]= []
 
 drawQueue.push((p:p5)=>{
   console.log(drawQueue)
-})  
+}) 
 
 window.addEventListener("load",()=>{
   console.log("load")
@@ -29,6 +29,12 @@ window.addEventListener("load",()=>{
   resize()
 
   mouse = mouseIO.getInstance()
+
+  const ws = new WebSocket('ws://localhost:8080');
+
+  ws.addEventListener("open", (event) => {
+    ws.send("Hello Server!");
+  });
 })
 
 function resize(){
@@ -67,7 +73,7 @@ function p5init(){
       p.createCanvas(1920,1080)
       p.fill(255)
       // p.ellipse(960,540,200)
-      new tank(50,1000,drawQueue)
+      new tank(50,1000,drawQueue,false)
     }
     
   
