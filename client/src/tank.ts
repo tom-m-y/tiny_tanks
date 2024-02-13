@@ -7,6 +7,10 @@ function rgb(r:number,g:number,b:number){
     return [r,g,b]
 }
 
+function rad(angle:number) {
+    return angle * (Math.PI / 180);
+  }
+
 export default class tank{
     queue;
     drawfunc;
@@ -21,17 +25,26 @@ export default class tank{
             p.strokeWeight(15)
             p.ellipse(this.x,this.y,10)
 
-            let bx = Math.cos(this.angle+90)*50+this.x
-            let by = Math.sin(this.angle+90)*50+this.y
-
+            let bx = Math.cos(rad(this.angle+90))*50+this.x
+            let by = Math.sin(rad(this.angle+90))*50+this.y
+            console.log(this.angle)
             p.line(
                 this.x,this.y,
                 bx,by
                 )
+            
+            const tscale = 35
+            const offset = 35
+
+            p.strokeWeight(14)
+            p.line(
+                Math.cos(rad(this.angle+offset))*tscale+this.x,Math.sin(rad(this.angle+offset))*tscale+this.y,
+                Math.cos(rad(this.angle-offset))*tscale+this.x,Math.sin(rad(this.angle-offset))*tscale+this.y
+            )
 
             p.line(
-                bx-5,by,
-                bx+5,by
+                Math.cos(rad(this.angle+offset+180))*tscale+this.x,Math.sin(rad(this.angle+offset+180))*tscale+this.y,
+                Math.cos(rad(this.angle-offset+180))*tscale+this.x,Math.sin(rad(this.angle-offset+180))*tscale+this.y
             )
         }
         this.x = x; this.y = y;
@@ -47,8 +60,8 @@ export default class tank{
         if (keyboard.isPressed("KeyD")){this.x += 5}
         if (keyboard.isPressed("KeyA")){this.x -= 5}
 
-        if (keyboard.isPressed("ArrowLeft")){this.angle -= 0.05}
-        if (keyboard.isPressed("ArrowRight")){this.angle += 0.05}
+        if (keyboard.isPressed("ArrowLeft")){this.angle -=5}
+        if (keyboard.isPressed("ArrowRight")){this.angle +=5}
 
         this.drawfunc(p)
     }
