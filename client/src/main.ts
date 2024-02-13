@@ -19,8 +19,13 @@ let canvas:HTMLElement|null;
 let drawQueue:[Function|tank]= []
 
 drawQueue.push((p:p5)=>{
-  console.log(drawQueue)
+  // console.log(drawQueue)
 }) 
+
+const ws = new WebSocket('ws://localhost:8080');
+ws.onerror =(e)=>{
+  console.log(e)
+}
 
 window.addEventListener("load",()=>{
   console.log("load")
@@ -29,12 +34,6 @@ window.addEventListener("load",()=>{
   resize()
 
   mouse = mouseIO.getInstance()
-
-  const ws = new WebSocket('ws://localhost:8080');
-
-  ws.addEventListener("open", (event) => {
-    ws.send("Hello Server!");
-  });
 })
 
 function resize(){
