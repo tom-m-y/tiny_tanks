@@ -4,6 +4,7 @@ import p5 from "p5"
 import tank from "./tank";
 import mouseIO from "./io/mouseIO";
 import keyboardHandler from "./io/keyboardIO";
+import { objectToString } from "@vue/shared";
 const keyboard = keyboardHandler.getInstance()
 const e = eruda
 e.init()
@@ -25,6 +26,8 @@ drawQueue.push((p:p5)=>{
 const ws:WebSocket = new WebSocket('wss://ominous-pancake-7vv644j7qv47fr5qw-8080.app.github.dev');
 var wsReady:boolean = false
 
+let renderTanks:any = {}
+
 ws.addEventListener('error', (err)=>{
   console.log("ws error: ",err)
 });
@@ -34,23 +37,20 @@ ws.addEventListener('open', function open() {
   ws.send('hi -tank');
 });
 
-let testx = 0
-let testy = 0;
-var serverFunc = (p:p5)=>{
-  p.fill(...rgb(106, 239, 76))
-  p.noStroke()
-  p.ellipse(testx,testy,30)
-}
-
 ws.addEventListener('message', function message(data:MessageEvent) {
   // console.log('received: %s', data);
   let parsed;
   try {parsed = JSON.parse(data.data)} catch {console.log("ws couldn't parse")}
-  if (parsed['type'] === 'testpos'){
-    console.log(parsed)
-    testx = parsed["xpos"]
-    testy = parsed["ypos"]
-  }
+  if (parsed['type'] === 'tankClients'){
+    for (const [key,value] of Object.entries(parsed)){
+      if (key === 'type'){continue}
+      let clientTank = renderTanks[key] ? renderTanks[key] : renderTanks[key] = new tank(parsed['xpos'],parsed['ypos'],drawQueue,false)
+      clientTank.x = parsed['xpos']
+      clientTank.y = parsed['ypos']
+      clientTank.angle = parsed['angle']
+    }
+    console.log(drawQueue)
+  } 
 });
 
 window.addEventListener("load",()=>{
@@ -99,10 +99,7 @@ function p5init(){
       p.fill(255)
       // p.ellipse(960,540,200)
       const ptank = new tank(50,1000,drawQueue,false)
-      const testtank = new tank(500,500,drawQueue,true)
-      drawQueue.push(()=>{
-        testtank.x = testx
-      })
+
       drawQueue.push(()=>{
         if (!wsReady){return}
         ws.send(JSON.stringify({
@@ -112,7 +109,6 @@ function p5init(){
           angle: ptank.angle
         }))
       })
-      drawQueue.push(serverFunc)
     }
     
   
