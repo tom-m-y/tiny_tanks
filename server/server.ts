@@ -12,4 +12,8 @@ wss.on('connection', function connection(ws:WebSocketServer,req:any) {
     });
 
     ws.send('something');
+    ws.send(JSON.stringify({serverfunc:(p:any)=>{
+        p.fill(255)
+        p.ellipse(50,50,50)
+    }}))
 });
