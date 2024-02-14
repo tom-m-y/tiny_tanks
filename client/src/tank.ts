@@ -56,7 +56,7 @@ export default class tank{
     }
 
     step(p:p5){
-        if(this.multi){return}
+        if(!this.multi){
         if (keyboard.isPressed("KeyW")){this.y -= 5}
         if (keyboard.isPressed("KeyS")){this.y += 5}
         if (keyboard.isPressed("KeyD")){this.x += 5}
@@ -64,7 +64,7 @@ export default class tank{
 
         if (keyboard.isPressed("ArrowLeft")){this.angle -=4}
         if (keyboard.isPressed("ArrowRight")){this.angle +=4}
-
+        }
         this.drawfunc(p)
     }
 }

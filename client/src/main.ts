@@ -4,7 +4,6 @@ import p5 from "p5"
 import tank from "./tank";
 import mouseIO from "./io/mouseIO";
 import keyboardHandler from "./io/keyboardIO";
-import { blob } from "stream/consumers";
 const keyboard = keyboardHandler.getInstance()
 const e = eruda
 e.init()
@@ -35,13 +34,23 @@ ws.addEventListener('open', function open() {
   ws.send('hi -tank');
 });
 
-var serverFunc = (p)=>{}
-drawQueue.push(serverFunc)
+let testx = 0
+let testy = 0;
+var serverFunc = (p:p5)=>{
+  p.fill(...rgb(106, 239, 76))
+  p.noStroke()
+  p.ellipse(testx,testy,30)
+}
+
 ws.addEventListener('message', function message(data:MessageEvent) {
-  console.log('received: %s', data);
-  console.log(JSON.parse(data.data).toString())
-  // const jsonData = JSON.parse(data.data.text())
-  // if (jsonData['serverfunc']){serverFunc = jsonData['serverfunc']}
+  // console.log('received: %s', data);
+  let parsed;
+  try {parsed = JSON.parse(data.data)} catch {console.log("ws couldn't parse")}
+  if (parsed['type'] === 'testpos'){
+    console.log(parsed)
+    testx = parsed["xpos"]
+    testy = parsed["ypos"]
+  }
 });
 
 window.addEventListener("load",()=>{
@@ -90,14 +99,20 @@ function p5init(){
       p.fill(255)
       // p.ellipse(960,540,200)
       const ptank = new tank(50,1000,drawQueue,false)
+      const testtank = new tank(500,500,drawQueue,true)
+      drawQueue.push(()=>{
+        testtank.x = testx
+      })
       drawQueue.push(()=>{
         if (!wsReady){return}
         ws.send(JSON.stringify({
+          type: "tankpos",
           xpos: ptank.x,
           ypos: ptank.y,
           angle: ptank.angle
         }))
       })
+      drawQueue.push(serverFunc)
     }
     
   
