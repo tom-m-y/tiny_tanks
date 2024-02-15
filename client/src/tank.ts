@@ -67,4 +67,9 @@ export default class tank{
         }
         this.drawfunc(p)
     }
+
+    delete(){
+        let i = this.queue.indexOf(this)
+        this.queue.splice(i,1)
+    }
 }

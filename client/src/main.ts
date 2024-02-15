@@ -42,6 +42,10 @@ ws.addEventListener('message', function message(data:MessageEvent) {
   let parsed;
   try {parsed = JSON.parse(data.data)} catch {console.log("ws couldn't parse")}
   if (parsed['type'] === 'tankClients'){
+    for (const [key] of Object.entries(renderTanks)){
+      if (parsed[key] === undefined){renderTanks[key].delete();delete renderTanks[key]}
+    }
+    // console.log(renderTanks)
     for (const [key,value] of Object.entries(parsed)){
       if (key === 'type'){continue}
       let clientTank = renderTanks[key] ? renderTanks[key] : renderTanks[key] = new tank(parsed['xpos'],parsed['ypos'],drawQueue,true)

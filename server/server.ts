@@ -23,23 +23,25 @@ wss.on('connection', function connection(ws:any,req:any) {
 
     ws.on('error', console.error);
 
-    ws.on('pong', ()=>{ws.isAlive = true})
+    ws.on('pong', ()=>{ws.isAlive = true; console.log('buddy ponged')})
+
+    ws.on('close', ()=>{
+        delete tankClients[ws.uuid]
+    })
 
     ws.on('message', function message(data:MessageEvent) {
         let parsed:any;
         //@ts-ignore
         try {parsed = JSON.parse(data)} catch {console.log("couldnd't parse json");parsed = undefined}
         if (parsed){
-            console.log(parsed)
+            // console.log(parsed)
             if (parsed['type'] === 'tankpos'){
                 clientTank['xpos'] = parsed['xpos']
                 clientTank['ypos'] = parsed['ypos']
                 clientTank['angle'] = parsed['angle']
             }
             // console.log(tankClients)
-        } else {
-            console.log(data.toString())
-        }
+        } else {console.log("couldn't parse response :(, here's it in a string: "),console.log(data.toString())}
         let clientsModified = Object.assign({},tankClients)
         delete clientsModified[uuid]
         ws.send(JSON.stringify(clientsModified))
@@ -48,12 +50,9 @@ wss.on('connection', function connection(ws:any,req:any) {
 });
 
 function serverLoop(){
+    // console.log(tankClients)
     if (wss.clients)
     wss.clients.forEach((ws:any) => {
-        if (ws.isAlive === false){ws.terminate(); delete tankClients[ws.uuid]}
-        ws.isAlive = false
-        ws.ping()
-        
         let clientsModified = Object.assign({},tankClients)
         delete clientsModified[ws.uuid]
         ws.send(JSON.stringify(clientsModified))
