@@ -44,12 +44,12 @@ ws.addEventListener('message', function message(data:MessageEvent) {
   if (parsed['type'] === 'tankClients'){
     for (const [key,value] of Object.entries(parsed)){
       if (key === 'type'){continue}
-      let clientTank = renderTanks[key] ? renderTanks[key] : renderTanks[key] = new tank(parsed['xpos'],parsed['ypos'],drawQueue,false)
-      clientTank.x = parsed['xpos']
-      clientTank.y = parsed['ypos']
-      clientTank.angle = parsed['angle']
+      let clientTank = renderTanks[key] ? renderTanks[key] : renderTanks[key] = new tank(parsed['xpos'],parsed['ypos'],drawQueue,true)
+      
+      clientTank.x = value['xpos']
+      clientTank.y = value['ypos']
+      clientTank.angle = value['angle']
     }
-    console.log(drawQueue)
   } 
 });
 

@@ -34,8 +34,15 @@ wss.on('connection', function connection(ws:WebSocketServer,req:any) {
         } else {
             console.log(parsed)
         }
-
-        ws.send(JSON.stringify(tankClients))
+        let clientsModified = Object.assign({},tankClients)
+        delete clientsModified[uuid]
+        ws.send(JSON.stringify(clientsModified))
     });
 
 });
+
+function serverLoop(){
+    console
+}
+
+setInterval(serverLoop,10)
