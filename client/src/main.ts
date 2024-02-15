@@ -34,7 +34,7 @@ ws.addEventListener('error', (err)=>{
 
 ws.addEventListener('open', function open() {
   wsReady = true
-  ws.send('hi -tank');
+  ws.send(JSON.stringify('hi -tank'));
 });
 
 ws.addEventListener('message', function message(data:MessageEvent) {
