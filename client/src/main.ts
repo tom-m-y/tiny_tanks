@@ -45,14 +45,35 @@ ws.addEventListener('message', function message(data:MessageEvent) {
     for (const [key] of Object.entries(renderTanks)){
       if (parsed[key] === undefined){renderTanks[key].delete();delete renderTanks[key]}
     }
-    // console.log(renderTanks)
+    console.log(parsed)
     for (const [key,value] of Object.entries(parsed)){
       if (key === 'type'){continue}
+
+      if (value['type'] == "tank"){
       let clientTank = renderTanks[key] ? renderTanks[key] : renderTanks[key] = new tank(parsed['xpos'],parsed['ypos'],drawQueue,true)
       
       clientTank.x = value['xpos']
       clientTank.y = value['ypos']
       clientTank.angle = value['angle']
+      }
+
+      if (value['type'] == "bullet"){
+        let bulletX = value['xpos']
+        let bulletY = value['ypos']
+        let size = value['size']
+        
+        //todo: use uuid system for bullets
+        let drawfunc = (p:p5)=>{
+          p.fill(255)
+          p.noStroke()
+          p.ellipse(bulletX,bulletY,size)
+
+          let i = drawQueue.indexOf(drawfunc)
+          drawQueue.splice(i,1)
+        }
+        drawQueue.push(drawfunc)
+      }
+
     }
   } 
 });
@@ -117,6 +138,7 @@ function p5init(){
     
   
     p.draw = function(){
+      console.log(drawQueue)
       p.background(...rgb(221, 145, 90))
 
       for (let i=0; i<drawQueue.length; i++){

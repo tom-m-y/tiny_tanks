@@ -11,9 +11,12 @@ let ids:string[] = []
 
 let tankClients:any = {type:'tankClients'}
 
+class bullet{
+    constructor(){}
+}
+
 wss.on('connection', function connection(ws:any,req:any) {
     console.log('connection')
-    ws.isAlive = true
 
     let uuid = uuidv4()
     ws.uuid = uuid
@@ -23,7 +26,7 @@ wss.on('connection', function connection(ws:any,req:any) {
 
     ws.on('error', console.error);
 
-    ws.on('pong', ()=>{ws.isAlive = true; console.log('buddy ponged')})
+    ws.on('pong', ()=>{})
 
     ws.on('close', ()=>{
         delete tankClients[ws.uuid]
@@ -49,12 +52,19 @@ wss.on('connection', function connection(ws:any,req:any) {
 
 });
 
+let x = 0
 function serverLoop(){
     // console.log(tankClients)
     if (wss.clients)
     wss.clients.forEach((ws:any) => {
         let clientsModified = Object.assign({},tankClients)
         delete clientsModified[ws.uuid]
+        clientsModified["bullet"] = {
+            type:"bullet",
+            xpos:x,
+            ypos:50,
+            size:50
+        }
         ws.send(JSON.stringify(clientsModified))
     });
 }
