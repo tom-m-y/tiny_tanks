@@ -23,7 +23,7 @@ drawQueue.push((p:p5)=>{
   // console.log(drawQueue)
 }) 
 
-const ws:WebSocket = new WebSocket('wss://ominous-pancake-7vv644j7qv47fr5qw-8080.app.github.dev');
+const ws:WebSocket = new WebSocket('wss://scaling-succotash-pjj4qq57vrvj264xv-8080.app.github.dev/');
 var wsReady:boolean = false
 
 let renderTanks:any = {}
