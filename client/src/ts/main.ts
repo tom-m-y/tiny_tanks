@@ -2,9 +2,8 @@ import eruda from "eruda"
 //@ts-ignore
 import p5 from "p5"
 import tank from "./tank";
-import mouseIO from "./io/mouseIO";
-import keyboardHandler from "./io/keyboardIO";
-import { objectToString } from "@vue/shared";
+import mouseIO from "../io/mouseIO";
+import keyboardHandler from "../io/keyboardIO";
 const keyboard = keyboardHandler.getInstance()
 const e = eruda
 e.init()
@@ -23,7 +22,7 @@ drawQueue.push((p:p5)=>{
   // console.log(drawQueue)
 }) 
 
-const ws:WebSocket = new WebSocket('wss://scaling-succotash-pjj4qq57vrvj264xv-8080.app.github.dev/');
+const ws:WebSocket = new WebSocket('wss://musical-space-spoon-977r44g6vq472ppr4-8080.app.github.dev/');
 var wsReady:boolean = false
 
 let renderTanks:any = {}
@@ -39,15 +38,17 @@ ws.addEventListener('open', function open() {
 
 ws.addEventListener('message', function message(data:MessageEvent) {
   // console.log('received: %s', data);
-  let parsed;
+  let parsed:any;
   try {parsed = JSON.parse(data.data)} catch {console.log("ws couldn't parse")}
   if (parsed['type'] === 'tankClients'){
     for (const [key] of Object.entries(renderTanks)){
       if (parsed[key] === undefined){renderTanks[key].delete();delete renderTanks[key]}
     }
     console.log(parsed)
-    for (const [key,value] of Object.entries(parsed)){
+    for (const [key,v] of Object.entries(parsed)){
       if (key === 'type'){continue}
+
+      const value = v as any;
 
       if (value['type'] == "tank"){
       let clientTank = renderTanks[key] ? renderTanks[key] : renderTanks[key] = new tank(parsed['xpos'],parsed['ypos'],drawQueue,true)
@@ -150,6 +151,7 @@ function p5init(){
       }
     }
   },
+  //@ts-ignore
   document.getElementById("canvas"))
   
 }

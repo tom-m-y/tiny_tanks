@@ -1,6 +1,6 @@
 //@ts-ignore
 import p5 from "p5"
-import keyboardHandler from "./io/keyboardIO";
+import keyboardHandler from "../io/keyboardIO";
 const keyboard = keyboardHandler.getInstance()
 
 function rgb(r:number,g:number,b:number){
