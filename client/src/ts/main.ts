@@ -2,9 +2,10 @@ import eruda from "eruda"
 //@ts-ignore
 import p5 from "p5"
 import tank from "./tank";
-import mouseIO from "../io/mouseIO";
-import keyboardHandler from "../io/keyboardIO";
-const keyboard = keyboardHandler.getInstance()
+import NetworkHandler from "./modules/NetworkHandler";
+import mouseIO from "./modules/io/mouseIO";
+import keyboardIO from "./modules/io/keyboardIO";
+const keyboard = keyboardIO.getInstance()
 const e = eruda
 e.init()
 
@@ -38,8 +39,8 @@ ws.addEventListener('open', function open() {
 
 ws.addEventListener('message', function message(data:MessageEvent) {
   // console.log('received: %s', data);
-  let parsed:any;
-  try {parsed = JSON.parse(data.data)} catch {console.log("ws couldn't parse")}
+  let parsed: { [x: string]: string|number };
+  try {parsed = JSON.parse(data.data)} catch {console.log("ws couldn't parse"); return;}
   if (parsed['type'] === 'tankClients'){
     for (const [key] of Object.entries(renderTanks)){
       if (parsed[key] === undefined){renderTanks[key].delete();delete renderTanks[key]}

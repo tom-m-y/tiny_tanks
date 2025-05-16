@@ -1,7 +1,7 @@
 //@ts-ignore
 import p5 from "p5"
-import keyboardHandler from "../io/keyboardIO";
-const keyboard = keyboardHandler.getInstance()
+import keyboardIO from "./modules/io/keyboardIO";
+const keyboard = keyboardIO.getInstance()
 
 function rgb(r:number,g:number,b:number){
     return [r,g,b]

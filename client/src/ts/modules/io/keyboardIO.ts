@@ -1,6 +1,6 @@
 
-export default class keyboardHandler{
-    private static instance: keyboardHandler;
+export default class keyboardIO{
+    private static instance: keyboardIO;
 
     keysPressed:{[id:string] : boolean};
     triggers:{downTriggers:Function[],upTriggers:Function[]}
@@ -27,9 +27,9 @@ export default class keyboardHandler{
         }
     }
 
-    static getInstance(): keyboardHandler{
-        keyboardHandler.instance = keyboardHandler.instance || new keyboardHandler()
-        return keyboardHandler.instance
+    static getInstance(): keyboardIO{
+        keyboardIO.instance = keyboardIO.instance || new keyboardIO()
+        return keyboardIO.instance
     }
 
     /**
